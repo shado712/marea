@@ -3,127 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إلى مارية الملكة 👑</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+    <title>ميلاد مارية 👑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&family=El+Messiri:wght@700&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0; padding: 0; height: 100vh; width: 100%;
             overflow: hidden; font-family: 'Cairo', sans-serif;
-            background: #000; color: #fff; transition: background 1.5s ease;
+            background: #000;
         }
 
-        /* حاوية الصفحات الحرة */
-        .master-container {
-            width: 100%; height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-            position: relative; z-index: 10;
+        /* خلفية سائلة تتحرك ألوانها تلقائياً */
+        .bg-gradient {
+            position: fixed; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(125deg, #2d1b33, #000, #4b1248, #0f0c29);
+            background-size: 400% 400%;
+            animation: gradientMove 10s ease infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            height: 100vh; display: flex; align-items: center; justify-content: center;
         }
 
         .page {
-            position: absolute; width: 90%; text-align: center;
-            opacity: 0; transform: translateY(30px);
-            transition: all 0.8s ease; pointer-events: none;
+            position: absolute; width: 85%; text-align: center;
+            opacity: 0; transform: scale(1.1);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
         }
 
-        .page.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .page.active { opacity: 1; transform: scale(1); pointer-events: auto; }
 
-        /* الصورة المركزية بدون أي حدود */
-        .hero-img {
-            width: 300px; height: 300px;
+        /* الصورة في المنتصف - شفافة وبدون حدود */
+        .main-sticker {
+            width: 320px; height: 320px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 25px rgba(255, 143, 163, 0.6));
-            animation: floating 4s infinite ease-in-out;
+            filter: drop-shadow(0 0 30px rgba(255, 77, 109, 0.4));
         }
 
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
-
-        /* نصوص حرة وكبيرة */
+        /* كتابة حرة ضخمة */
         h1 {
-            font-family: 'Aref Ruqaa', serif; font-size: 48px;
-            color: #ff8fa3; margin: 0 0 10px;
-            text-shadow: 0 0 20px rgba(255, 143, 163, 0.5);
+            font-family: 'El Messiri', sans-serif; font-size: 50px;
+            color: #ff8fa3; margin: 0; line-height: 1.2;
         }
         p {
-            font-size: 24px; line-height: 1.6; font-weight: bold;
-            margin: 0 0 40px; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            font-size: 24px; color: #fff; margin: 20px 0 40px;
+            font-weight: 200; opacity: 0.9;
         }
 
-        /* زر ملكي بسيط */
-        .btn-next {
-            background: transparent; color: #ff8fa3;
-            border: 3px solid #ff8fa3; padding: 15px 50px;
-            border-radius: 100px; font-size: 22px; font-weight: 900;
-            cursor: pointer; transition: 0.3s;
+        /* زر بسيط ومختفي تقريباً حتى تلمسه */
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 18px 70px; border-radius: 20px;
+            font-size: 20px; cursor: pointer; transition: 0.3s;
         }
-        .btn-next:hover { background: #ff8fa3; color: #fff; box-shadow: 0 0 30px #ff8fa3; }
+        .nav-btn:hover { background: #ff4d6d; border-color: #ff4d6d; }
 
-        /* استيكرات الخلفية المتحركة */
-        .bg-sticker {
-            position: absolute; pointer-events: none; z-index: 1;
-            animation: moveUp linear infinite; opacity: 0.6;
+        /* استيكرات الخلفية */
+        .bg-elements {
+            position: absolute; pointer-events: none;
+            font-size: 25px; animation: floatUp 6s infinite linear;
         }
-        @keyframes moveUp {
-            from { transform: translateY(110vh) rotate(0deg); }
-            to { transform: translateY(-10vh) rotate(360deg); }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
-    <div class="master-container" id="slider"></div>
+    <div class="bg-gradient" id="bgBody"></div>
+    <div class="container" id="slider"></div>
 
     <script>
-        const pagesData = [
-            { t: "ميلاد ملكتي مارية 👑", p: "اليوم نورت الدنيا كلها بضحكتج. كل عام وأنتي قطعة من روحي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", btn: "نبدأ الاحتفال؟ ✨", bg: "#1a1a2e", stickers: ['🎈', '✨', '🌸'] },
-            { t: "أحلى من السكر 🍭", p: "كبرت حبيبتي سنة وصارت أحلى بمليون مرة. ربي يخليج إلي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v86vXfG1KzE3MvW5sE/giphy.gif", btn: "كملي يا روحي ❤️", bg: "#2d1b33", stickers: ['🎂', '🎁', '💖'] },
-            { t: "اعتذار من القلب 🥺", p: "مارية.. والله قلبي يوجعني لأن بعيد عنج، بس أنتي بوسط قلبي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", btn: "سامحيني 💔", bg: "#0f0c29", stickers: ['🌧️', '🥺', '💔'] },
-            { t: "وعد حيدر للأبد 💍", p: "أوعدج أول ما نلتقي أعوضج عن كل ثانية. أنتي ملكتي دايماً.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", btn: "أعشقج مارية ❤️", bg: "#5c2b4c", stickers: ['💎', '🎀', '⭐'] },
-            { t: "ضحكتج هي العيد ✅", p: "يلا هسة اضحكي ونوري دنيتي. ميلاد سعيد يا أحلى مارية بالعالم!", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", btn: "أحبك حيدر 😍", bg: "#ff8fa3", stickers: ['🎆', '🌸', '💝'] }
+        const story = [
+            { t: "ميلاد ملكتي مارية", p: "نورتِ الدنيا بضحكتج، كل عام وأنتي قطعة من روحي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", btn: "نبدأ؟ ✨", icons: ['🌸','✨'] },
+            { t: "يا قطعة من السكر", p: "كبرتِ سنة وصرتِ أحلى، ربي لا يحرمني منج.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", btn: "بعد.. ❤️", icons: ['🍰','🎂'] },
+            { t: "اعتذار حقيقي", p: "والله البعد صعب، وسامحيني لأن ما كدرت أكون يمج اليوم.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", btn: "سامحيني 🥺", icons: ['💔','🌧️'] },
+            { t: "وعد حيدر", p: "أوعدج أول ما نلتقي أسويلج حفلة ما صايرة. أنتي ملكتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", btn: "أعشقج ❤️", icons: ['💍','💎'] },
+            { t: "عيد ميلاد سعيد", p: "يلا اضحكي هسة، حيدر يحبج ويموت عليج. تم الصلح؟", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v86vXfG1KzE3MvW5sE/giphy.gif", btn: "أحبك حيدر 😍", icons: ['🎆','💖'] }
         ];
 
-        let current = 0;
+        let cur = 0;
         const slider = document.getElementById('slider');
-        const body = document.getElementById('mainBody');
 
         function build() {
-            pagesData.forEach((data, i) => {
+            story.forEach((page, i) => {
                 const div = document.createElement('div');
                 div.className = `page ${i === 0 ? 'active' : ''}`;
                 div.innerHTML = `
-                    <img src="${data.img}" class="hero-img">
-                    <h1>${data.t}</h1>
-                    <p>${data.p}</p>
-                    <button class="btn-next" onclick="next()">${data.btn}</button>
+                    <img src="${page.img}" class="main-sticker">
+                    <h1>${page.t}</h1>
+                    <p>${page.p}</p>
+                    <button class="nav-btn" onclick="nextPage()">${page.btn}</button>
                 `;
                 slider.appendChild(div);
             });
-            body.style.background = pagesData[0].bg;
         }
 
-        function next() {
+        function nextPage() {
             const pages = document.querySelectorAll('.page');
-            if (current < pages.length - 1) {
-                pages[current].classList.remove('active');
-                current++;
-                pages[current].classList.add('active');
-                body.style.background = pagesData[current].bg;
+            if (cur < pages.length - 1) {
+                pages[cur].classList.remove('active');
+                cur++;
+                pages[cur].classList.add('active');
             } else {
-                alert("أحبج مارية! كل عام وأنتي بخير ❤️");
+                alert("عيد ميلاد سعيد مارية! ❤️");
             }
         }
 
-        // توليد استيكرات الخلفية المتغيرة
         setInterval(() => {
-            const s = document.createElement('div');
-            s.className = 'bg-sticker';
-            const currentStickers = pagesData[current].stickers;
-            s.innerHTML = currentStickers[Math.floor(Math.random() * currentStickers.length)];
-            s.style.left = Math.random() * 100 + 'vw';
-            s.style.fontSize = Math.random() * 20 + 25 + 'px';
-            s.style.animationDuration = Math.random() * 3 + 4 + 's';
-            document.body.appendChild(s);
-            setTimeout(() => s.remove(), 6000);
-        }, 300);
+            const el = document.createElement('div');
+            el.className = 'bg-elements';
+            el.innerHTML = story[cur].icons[Math.floor(Math.random() * 2)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 6000);
+        }, 400);
 
         build();
     </script>
