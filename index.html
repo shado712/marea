@@ -3,146 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مارية.. مِلكي ومَلكتي 👑</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&family=Aref+Ruqaa:wght@700&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
+    <title>مارية.. ميلاد الملكة 👑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&family=Aref+Ruqaa:wght@700&family=El+Messiri:wght@700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            height: 100vh; overflow: hidden; background: #000;
-            font-family: 'Cairo', sans-serif; transition: 1.5s ease;
+        :root { --p1: #ff4d6d; --s1: #ff8fa3; --w: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; border: none; }
+        body, html {
+            height: 100vh; width: 100%; overflow: hidden;
+            font-family: 'Cairo', sans-serif; background: #000;
+            color: #fff; transition: background 1.5s ease-in-out;
         }
 
-        /* نظام الخلفية المتغيرة */
-        .nebula {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #2d1b33 0%, #000 100%);
-            z-index: -1; transition: 2s; opacity: 0.8;
-        }
-
-        .container {
-            height: 100vh; width: 100%; display: flex;
-            align-items: center; justify-content: center; position: relative;
+        /* حاوية العرض الحرة */
+        .master-stage {
+            width: 100%; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; z-index: 10;
         }
 
         .page {
-            position: absolute; width: 90%; max-width: 500px;
-            text-align: center; opacity: 0; visibility: hidden;
-            transform: scale(0.7) rotate(-5deg);
-            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: absolute; width: 90%; text-align: center;
+            opacity: 0; transform: scale(1.2) translateY(50px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
         }
 
-        .page.active {
-            opacity: 1; visibility: visible;
-            transform: scale(1) rotate(0deg);
-        }
+        .page.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
 
-        /* ستيكر مركزي ضخم ومتحرك */
-        .main-sticker {
-            width: 280px; height: 280px; margin: 0 auto 20px;
-            filter: drop-shadow(0 0 30px rgba(255, 143, 163, 0.6));
-            animation: pulseSticker 3s infinite ease-in-out;
+        /* الصورة في المنتصف - شفافة بالكامل وحرة */
+        .kinetic-sticker {
+            width: 320px; height: 320px;
+            margin: 0 auto 10px;
+            filter: drop-shadow(0 0 30px rgba(255, 143, 163, 0.7));
+            animation: floatingSticker 4s infinite ease-in-out;
+            user-select: none;
         }
-        @keyframes pulseSticker { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes floatingSticker { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
 
-        /* نصوص ملكية حرة */
+        /* نصوص حرة ضخمة بدون حدود */
         h1 {
-            font-family: 'Aref Ruqaa', serif; font-size: 42px;
-            color: #ff8fa3; margin-bottom: 15px; text-shadow: 0 0 20px rgba(255,143,163,0.5);
+            font-family: 'Aref Ruqaa', serif; font-size: 50px;
+            color: var(--s1); margin: 0 0 10px;
+            text-shadow: 0 0 20px rgba(255,143,163,0.6);
         }
         p {
-            font-size: 22px; color: #eee; line-height: 1.6;
-            margin-bottom: 40px; font-family: 'Reem Kufi', sans-serif;
+            font-size: 24px; line-height: 1.7; font-weight: bold;
+            margin: 0 0 45px; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            font-family: 'El Messiri', sans-serif;
         }
 
-        /* أزرار متغيرة الأشكال */
-        .btn-base {
-            padding: 15px 50px; font-size: 20px; font-weight: 900;
-            cursor: pointer; transition: 0.4s; border: none; outline: none;
+        /* الأزرار الملكية المتغيرة */
+        .royal-btn {
+            padding: 18px 60px; font-size: 22px; font-weight: 900;
+            cursor: pointer; transition: 0.4s;
         }
+        .royal-btn:active { transform: scale(0.9); }
 
-        /* استيكرات الخلفية المتطايرة */
-        .bg-element {
+        /* ستيكرات الخلفية السينمائية المتطايرة */
+        .bg-kinetic-element {
             position: absolute; pointer-events: none; z-index: 1;
-            animation: driftUp linear infinite;
+            animation: flyBackground linear infinite; opacity: 0.6;
         }
-        @keyframes driftUp {
-            from { transform: translateY(110vh) scale(0.5); opacity: 0; }
-            50% { opacity: 0.7; }
-            to { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+        @keyframes flyBackground {
+            from { transform: translateY(110vh) rotate(0deg); }
+            to { transform: translateY(-10vh) rotate(360deg); }
         }
     </style>
 </head>
-<body>
+<body id="dynamicBody">
 
-    <div class="nebula" id="bg"></div>
-    <div class="container" id="slider"></div>
+    <div class="master-stage" id="slider"></div>
 
     <script>
         const story = [
-            { t: "ميلاد ملكتي مارية 👑", p: "اليوم نورت الدنيا كلها بضحكتج. كل عام وأنتي قطعة من روحي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", bg: "radial-gradient(circle, #2d1b33 0%, #000 100%)", btnCls: "btn-1", btnTxt: "ادخلي عالمي ✨", stickers: ['🎈','✨'] },
-            { t: "أجمل من كبر سنة 😍", p: "صرتي أحلى بمليون مرة، وصرتي لقلبي أقرب من النبض. ربي لا يحرمني منج.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v86vXfG1KzE3MvW5sE/giphy.gif", bg: "radial-gradient(circle, #4b1248 0%, #0b0b0b 100%)", btnCls: "btn-2", btnTxt: "أحبج هواي ❤️", stickers: ['🍰','🎂'] },
-            { t: "اعتذار مرّ القسوة 😔", p: "مارية.. قلبي يوجعني لأن اليوم عيد ميلادج وحيدر مو يمج. البعد هد حيلي والله.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", bg: "radial-gradient(circle, #0f0c29 0%, #000 100%)", btnCls: "btn-3", btnTxt: "سامحيني يا روحي 🥺", stickers: ['💔','🌧️'] },
-            { t: "هدية قلبي الج 🎁", p: "أدري الهدية الرقمية متكفي، بس والله لو أكدر أجيب لج النجوم وأخليها بين إيدج ما أقصر.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", bg: "radial-gradient(circle, #1a1a2e 0%, #000 100%)", btnCls: "btn-4", btnTxt: "أنتي أغلى هدية ✨", stickers: ['🎁','💎'] },
-            { t: "وعد الصدق 💍", p: "أوعدج أول ما نلتقي، أسويلج حفلة الكل يسولف بيها. أنتي ملكة على عرش قلبي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", bg: "radial-gradient(circle, #5c2b4c 0%, #0b0b0b 100%)", btnCls: "btn-5", btnTxt: "وعد حيدر 💍", stickers: ['💍','🎀'] },
-            { t: "يا قطعة من الجنة 🌸", p: "ضحكتج هي اللي تصبرني على هالأيام الصعبة. لا تحرميني منها أبد.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VduFvSgSPS2H4XpnhB/giphy.gif", bg: "radial-gradient(circle, #311b33 0%, #000 100%)", btnCls: "btn-6", btnTxt: "يا روحي أنتي ❤️", stickers: ['🌹','🌻'] },
-            { t: "أنتي طفلتي المدللة 🧸", p: "حتى لو كبرتي مية سنة، تبقين بنظري ذيج الطفلة اللي أخاف عليها من الهوا.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "radial-gradient(circle, #8c3b5d 0%, #0b0b0b 100%)", btnCls: "btn-7", btnTxt: "تدللي ماريتي 🥰", stickers: ['🧸','🍭'] },
-            { t: "البعد مجرد رقم 🌍", p: "المسافة تبعد أجسادنا، بس قلوبنا متصلة بحبل ما ينقطع أبد. أحس بيج وبكل دكة بقلبج.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", bg: "radial-gradient(circle, #24243e 0%, #000 100%)", btnCls: "btn-8", btnTxt: "أنتي ملكي دائمًا 🔐", stickers: ['🗝️','💖'] },
-            { t: "عمر جديد وحب جديد ❤️", p: "يا رب تكون هالسنة بداية لكل خير تتمنيه. حيدر راح يبقى وياج لآخر نفس.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", bg: "radial-gradient(circle, #ff8fa3 0%, #ffe5ec 100%)", btnCls: "btn-9", btnTxt: "أعشقج موت 😍", stickers: ['💞','⭐'] },
-            { t: "تم الصلح والاحتفال! ✅", p: "يلا هسة اضحكي ونوري دنيتي بضحكتج الساحرة. ميلاد سعيد يا أحلى مارية بالعالم!", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "radial-gradient(circle, #ffffff 0%, #ffb3c1 100%)", btnCls: "btn-10", btnTxt: "أحبك حيدر ❤️", stickers: ['🎇','🎉'] }
+            { t: "ميلاد ملكتي مارية 👑", p: "اليوم نورت الدنيا بضحكتج. كل عام وأنتي أجمل شي صار بحياتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", btnTxt: "ادخلي عالمي ✨", bg: "radial-gradient(circle, #2d1b33 0%, #000 100%)", stickers: ['🎈','✨'], style: "border-radius:100px; background:#ff4d6d; color:#fff;" },
+            { t: "أجمل من كبر سنة 😍", p: "صرتي أحلى بمليون مرة، وربي لا يحرمني منج ومن ضحكتج.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v86vXfG1KzE3MvW5sE/giphy.gif", btnTxt: "أحبج هواي ❤️", bg: "linear-gradient(135deg, #4b1248, #000000)", stickers: ['🍰','🎂'], style: "border-radius:20px; background:transparent; border:3px solid #ff8fa3; color:#ff8fa3;" },
+            { t: "اعتذار مرّ القسوة 😔", p: "مارية.. قلبي يوجعني لأن بعيد عنج، وما كدرت أجيب لج هدية تليق بيج.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", bg: "linear-gradient(135deg, #0f0c29, #302b63)", btnTxt: "سامحيني 🥺", stickers: ['🌧️','💔'], style: "border-radius:0; background:#0f0c29; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); color:#fff;" },
+            { t: "أنتي أغلى هدية 🎁", p: "والله لو كنت قريب أسويلج أكبر حفلة، بس البعد هد حيلي. تقبلي هالكلمات.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", btnTxt: "يا دنيتي ✨", bg: "linear-gradient(135deg, #1a1a2e, #000000)", stickers: ['🎁','💎'], style: "border-radius:100px; background:linear-gradient(90deg, #ff4d6d, #ff8fa3); color:#fff; box-shadow: 0 10px 20px rgba(255, 77, 109, 0.4);" },
+            { t: "وعد حيدر للأبد 💍", p: "أوعدج أول ما نلتقي أعوضج عن كل ثانية كنت بيها بعيد. أنتي ملكتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", btnTxt: "أعشقج مارية ❤️", bg: "radial-gradient(circle, #5c2b4c 0%, #0b0b0b 100%)", stickers: ['💍','🎀'], style: "border-radius:20px 0 20px 0; background:#4a1248; color:#fff;" },
+            { t: "يا قطعة من الجنة 🌻", p: "ضحكتج هي اللي تصبرني على هالأيام الصعبة. لا تحرميني منها أبد.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VduFvSgSPS2H4XpnhB/giphy.gif", btnTxt: "فديتج يا روحي ❤️", bg: "radial-gradient(circle, #311b33 0%, #000 100%)", stickers: ['🌹','Sunflower'], style: "border-radius:50px; background:#ff8fa3; color:#fff;" },
+            { t: "طفلتي المدللة 🧸", p: "تبقين بنظري ذيج الطفلة اللي أخاف عليها من الهوا. تدللي ماريتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", btnTxt: "تدللي ✅", bg: "radial-gradient(circle, #8c3b5d 0%, #0b0b0b 100%)", stickers: ['🧸','🍭'], style: "border-radius:50px; border:2px dashed #fff; background:rgba(255,255,255,0.1); color:#fff;" },
+            { t: "المسافة مجرد أرقام 🌏", p: " قلوبنا متصلة بحبل ما ينقطع أبد. أنتي بكل دقة من قلبي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", btnTxt: "أنتي ملكي دائمًا 🔐", bg: "linear-gradient(135deg, #24243e, #000000)", stickers: ['🗝️','💖'], style: "border-radius:15px; background:#24243e; box-shadow: 0 0 20px #ff4d6d; color:#fff;" },
+            { t: "عمر جديد وحب جديد ❤️", p: "يا رب تكون هالسنة بداية لكل خير. حيدر راح يبقى وياج لآخر نفس.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", btnTxt: "أعشقج موت 😍", bg: "linear-gradient(135deg, #ff8fa3, #ffe5ec)", stickers: ['💞','✨'], style: "border-radius:40px; background:#fff; color:#ff4d6d; font-weight:bold;" },
+            { t: "تم الصلح يا روحي! ✅", p: "يلا اضحكي ونوري دنيتي بضحكتج. ميلاد سعيد يا أحلى مارية بالعالم!", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", btnTxt: "أحبك حيدر 😍", bg: "radial-gradient(circle, #ffffff 0%, #ffb3c1 100%)", stickers: ['🎆','🎉'], style: "border-radius:50px; background:transparent; border:4px double #ff4d6d; color:#ff4d6d;" }
         ];
 
         let cur = 0;
         const slider = document.getElementById('slider');
-        const bg = document.getElementById('bg');
+        const body = document.动态Body;
 
         function build() {
-            story.forEach((p, i) => {
+            story.forEach((page, i) => {
                 const div = document.createElement('div');
                 div.className = `page ${i === 0 ? 'active' : ''}`;
-                
-                // أنماط الأزرار المتغيرة
-                const styles = [
-                    "border-radius:50px; background:#ff4d6d; color:#fff;",
-                    "border-radius:10px; background:transparent; border:3px solid #ff8fa3; color:#ff8fa3;",
-                    "border-radius:0; background:#302b63; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); color:#fff;",
-                    "border-radius:100px; background:linear-gradient(90deg, #ff4d6d, #ff8fa3); color:#fff;",
-                    "border-radius:30px 0 30px 0; background:#4a1248; color:#fff;",
-                    "border-radius:50%; width:180px; height:180px; padding:0; background:#ff8fa3; color:#fff;",
-                    "border-radius:50px; border:2px dashed #fff; background:rgba(255,255,255,0.1); color:#fff;",
-                    "border-radius:15px; background:#24243e; box-shadow: 0 0 20px #ff4d6d; color:#fff;",
-                    "border-radius:40px; background:#fff; color:#ff4d6d; font-weight:bold;",
-                    "border-radius:50px; background:transparent; border:4px double #ff4d6d; color:#ff4d6d;"
-                ];
-
                 div.innerHTML = `
-                    <img src="${p.img}" class="main-sticker">
-                    <h1>${p.t}</h1>
-                    <p>${p.p}</p>
-                    <button class="btn-base" style="${styles[i]}" onclick="next()">${p.btnTxt}</button>
+                    <img src="${page.img}" class="kinetic-sticker">
+                    <h1>${page.t}</h1>
+                    <p>${page.p}</p>
+                    <button class="royal-btn" style="${page.style}" onclick="nextPage()">${page.btnTxt}</button>
                 `;
                 slider.appendChild(div);
             });
-            bg.style.background = story[0].bg;
+            document.body.style.background = story[0].bg;
         }
 
-        function next() {
+        function nextPage() {
             const pages = document.querySelectorAll('.page');
             if (cur < pages.length - 1) {
                 pages[cur].classList.remove('active');
                 cur++;
                 pages[cur].classList.add('active');
-                bg.style.background = story[cur].bg;
+                document.body.style.background = story[cur].bg;
+                if (cur >= 8) document.body.style.color = "#333"; // تغيير لون الخط لو الخلفية بقت فاتحة
             } else {
-                alert("تم إرسال كل الحب لقلب مارية! ❤️");
+                alert("تم إرسال كل الحب لقلب مارية! ❤️ كل عام وأنتي بخير.");
             }
         }
 
-        // استيكرات خلفية تتغير مع كل صفحة
+        // إنشاء استيكرات خلفية متغيرة
         setInterval(() => {
             const s = document.createElement('div');
-            s.className = 'bg-element';
-            const icons = story[cur].stickers;
-            s.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+            s.className = 'bg-kinetic-element';
+            const currentIcons = story[cur].stickers;
+            s.innerHTML = currentIcons[Math.floor(Math.random() * currentIcons.length)];
             s.style.left = Math.random() * 100 + 'vw';
             s.style.fontSize = Math.random() * 20 + 25 + 'px';
             s.style.animationDuration = Math.random() * 3 + 4 + 's';
