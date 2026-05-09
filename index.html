@@ -3,128 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إلى مارية الملكة 👑</title>
+    <title>إلى ماريّتي 👑</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&family=Amiri:ital,wght@1,700&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
     <style>
+        :root { --accent: #ff4d6d; --text: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html {
             height: 100vh; width: 100%; overflow: hidden;
-            background: #000; color: #fff; transition: background 1.5s ease;
+            background: #000; color: var(--text); 
+            transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: 'Cairo', sans-serif;
         }
 
-        .master-stage {
+        /* حاوية المشاهد - بدون حدود */
+        .cinema-container {
             height: 100vh; width: 100%; display: flex;
             align-items: center; justify-content: center; position: relative;
         }
 
-        .page {
-            position: absolute; width: 85%; text-align: center;
-            opacity: 0; transform: translateY(50px) scale(0.9);
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        .scene {
+            position: absolute; width: 85%; max-width: 600px; text-align: center;
+            opacity: 0; transform: scale(1.1) translateY(30px);
+            transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
             pointer-events: none;
         }
 
-        .page.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .scene.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
 
-        /* ستيكر مركزي طائر وبدون حدود */
-        .hero-img {
-            width: 280px; height: 280px; margin-bottom: 20px;
-            filter: drop-shadow(0 0 30px rgba(255, 143, 163, 0.6));
-            animation: floatAnim 4s infinite ease-in-out;
+        /* الاستيكر المركزي - طائر وبدون أي إطار */
+        .main-sticker {
+            width: 300px; height: 300px; margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px rgba(255, 77, 109, 0.5));
+            animation: floatHero 5s infinite ease-in-out;
+            object-fit: contain;
         }
-        @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes floatHero { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-25px) rotate(3deg); } }
 
+        /* نصوص بأسلوب "حيدر" الفخم */
         h1 {
-            font-family: 'Aref Ruqaa', serif; font-size: 45px;
-            color: #ff8fa3; margin-bottom: 15px;
+            font-family: 'Aref Ruqaa', serif; font-size: 48px;
+            color: var(--accent); margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 77, 109, 0.4);
         }
         p {
-            font-family: 'Amiri', serif; font-size: 24px; line-height: 1.6;
-            margin-bottom: 40px; opacity: 0.9;
+            font-family: 'Amiri', serif; font-size: 26px; line-height: 1.6;
+            margin-bottom: 45px; opacity: 0.95; font-style: italic;
         }
 
-        /* أزرار متغيرة الأشكال */
+        /* أزرار متفاعلة بأشكال متغيرة */
         .royal-btn {
-            padding: 15px 60px; font-size: 20px; font-weight: 900;
+            padding: 18px 70px; font-size: 22px; font-weight: 900;
             cursor: pointer; transition: 0.4s; border: none;
+            background: var(--accent); color: #fff;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
         }
+        .royal-btn:hover { transform: scale(1.05); box-shadow: 0 15px 30px var(--accent); }
 
-        /* جزيئات الخلفية */
-        .bg-element {
-            position: absolute; pointer-events: none; z-index: 1;
-            animation: driftUp linear infinite; opacity: 0.5;
+        /* جزيئات خلفية تتبع المود */
+        .particle {
+            position: absolute; pointer-events: none; z-index: -1;
+            animation: drift linear infinite;
         }
-        @keyframes driftUp {
-            from { transform: translateY(110vh) rotate(0deg); }
-            to { transform: translateY(-10vh) rotate(360deg); }
-        }
+        @keyframes drift { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
     </style>
 </head>
-<body id="mainBody">
+<body id="masterBody">
 
-    <div class="master-stage" id="slider"></div>
+    <div class="cinema-container" id="slider"></div>
 
     <script>
-        const story = [
-            { t: "ميلاد ملكتي مارية 👑", p: "الليلة مو بس عيد ميلادج، الليلة عيد لقلبي لأن أنتي بيه.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", bg: "#1a1a2e", btn: "نبدأ المشوار؟ ✨", icons: ['✨','🌸'], br: "100px" },
-            { t: "يا قطعة من السكر 😍", p: "كبرت حبيبتي سنة وصارت أحلى بمليون مرة. يا رب كل أيام حبنا أعياد.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v86vXfG1KzE3MvW5sE/giphy.gif", bg: "#2d1b33", btn: "أحبج هواي ❤️", icons: ['🍰','💖'], br: "20px" },
-            { t: "عذرُ المُحب 😔", p: "مارية.. قلبي يوجعني لأن بعيد وما كدرت أجيب لج هدية تليق بمقامج اليوم.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", bg: "#0f0c29", btn: "سامحيني 🥺", icons: ['🌧️','💔'], br: "0" },
-            { t: "أنتي أغلى هدية 🎁", p: "لو كان الود ودي، لقطفت لج نجوم السما وسويتها قلادة بصدرج.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", bg: "#1a1a2e", btn: "يا دنيتي ✨", icons: ['🎁','💎'], br: "50px" },
-            { t: "وعد حيدر للأبد 💍", p: "أوعدج أول ما نلتقي أعوضج عن كل ثانية كنت بيها بعيد. أنتي ملكتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", bg: "#4a1248", btn: "وعد رجال ❤️", icons: ['💍','🔐'], br: "30px" },
-            { t: "ملاكي الصغير 👼", p: "بكل تفاصيلج، أنتي عالمي اللي أهرب له من ضجيج الحياة.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VduFvSgSPS2H4XpnhB/giphy.gif", bg: "#311b33", btn: "يا روحي ❤️", icons: ['🌹','🧸'], br: "10px 40px" },
-            { t: "نور عيني مارية 🌟", p: "لا تحزني لبعدي، أنا أسكن في نبضج وأسمع دعواتج بكل لحظة.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "#8c3b5d", btn: "أنتي بقلبي 🕯️", icons: ['🕯️','⭐'], br: "100px" },
-            { t: "المسافة خرافة 🌏", p: "المدن حواجز وهمية، وحبج هو الحقيقة الوحيدة المطلقة بحياتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", bg: "#24243e", btn: "وطني أنتي 🔐", icons: ['🌏','💖'], br: "20px" },
-            { t: "سندي وقوتي 💪", p: "سأبقى خلفج، جبلاً لا يميل، حتى نرى أحلامج حقيقة نلمسها باليد.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", bg: "#5c2b4c", btn: "معاً للأبد 🛡️", icons: ['💞','🛡️'], br: "50px" },
-            { t: "ضحكتج هي العيد 🎉", p: "ما أريد أشوف أي دمعة بعينج، أريد بس الضحكة اللي تضوي الدنيا.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "#ff8fa3", btn: "اضحكيلي 😍", icons: ['🎆','🎉'], br: "100px" },
-            { t: "يا عطر الورد 🌹", p: "كل عام وأنتي بستان ورد بوسط صحراء أيامي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VduFvSgSPS2H4XpnhB/giphy.gif", bg: "#1a1a2e", btn: "يا عطري ✨", icons: ['🌹','🌻'], br: "20px" },
-            { t: "أنتي استثنائيّة ✨", p: "ما تشبهين أحد، ولا أحد يشبهج. أنتي النسخة الوحيدة اللي دخلت قلبي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", bg: "#2d1b33", btn: "يا فريدتي ❤️", icons: ['💎','✨'], br: "0" },
-            { t: "حلمي الأجمل 🌙", p: "تمنيت أكون يمج هسة ونحتفل سوة، بس الحلم راح يصير حقيقة قريب.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "#0f0c29", btn: "قريباً جداً 💍", icons: ['🌙','🌠'], br: "40px" },
-            { t: "بنت قلبي ❤️", p: "كبرتي سنة بس تبقين بعيني ذيج الطفلة اللي أخاف عليها من الهوى.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v86vXfG1KzE3MvW5sE/giphy.gif", bg: "#4a1248", btn: "عشقي الأبدي 😍", icons: ['🧸','💝'], br: "100px" },
-            { t: "تم الصلح يا روحي! ✅", p: "ميلاد سعيد يا أحلى مارية بالعالم. حيدر يحبج ويموت عليج.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "#ffb3c1", btn: "أحبك حيدر ❤️", icons: ['🎇','🎉'], br: "100px" }
+        const script = [
+            { t: "ميلاد ملكتي مارية", p: "الليلة الدنيا كلها تحتفل بيج، وأنا أولهم بقلبي وروحي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", bg: "#1a001a", br: "100px", icons: ['✨','🌸'] },
+            { t: "يا قطعة من السكر", p: "كبرتِ سنة وصرتِ بقلبي أكبر بمليون مرة. ربي يحفظج إلي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v86vXfG1KzE3MvW5sE/giphy.gif", bg: "#2d1b33", br: "20px", icons: ['🍰','🎂'] },
+            { t: "اعتذار من القلب", p: "مارية.. قلبي يوجعني لأن اليوم مو يمج، والبعد منعني أجيب هدية تليق بيج.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", bg: "#0f0c29", br: "0", icons: ['🌧️','💔'] },
+            { t: "أنتي أغلى هدية", p: "لو بيدي، لقطفت لج نجوم السما وسويتها قلادة. بس الجايات أحلى.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", bg: "#1a1a2e", br: "50px", icons: ['🎁','💎'] },
+            { t: "وعد حيدر", p: "أوعدج أول ما نلتقي، أسويلج حفلة الكل يحجي بيها. أنتي ملكتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9uH9T34u3U7YUnD/giphy.gif", bg: "#4a1248", br: "30px", icons: ['💍','🔐'] },
+            { t: "ملاكي الصغير", p: "بكل تفاصيلج، أنتي العالم اللي أهرب له من ضجيج الحياة.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VduFvSgSPS2H4XpnhB/giphy.gif", bg: "#311b33", br: "10px 40px", icons: ['🌹','🧸'] },
+            { t: "يا نور عيني", p: "لا تحزنين لبعدي، أنا أسكن في نبضج وأسمع دعواتج بكل لحظة.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "#4e1a3a", br: "100px", icons: ['🌟','🕯️'] },
+            { t: "المسافة خرافة", p: "المدن حواجز وهمية، وحبج هو الحقيقة الوحيدة المطلقة بحياتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHWkARu7Aac75/giphy.gif", bg: "#24243e", br: "15px", icons: ['🌏','💖'] },
+            { t: "سندي الأبدي", p: "راح أبقى خلفج، جبلاً ما يميل، لحد ما أحلامج تصير حقيقة.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", bg: "#5c2b4c", br: "40px", icons: ['🛡️','💞'] },
+            { t: "ابتسامتج حياة", p: "ما أريد أشوف دمعة بعينج، أريد بس الضحكة اللي تضوي دنيتي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "#ff8fa3", br: "100px", icons: ['🎇','🎉'] },
+            { t: "يا عطر الورد", p: "كل عام وأنتي بستان ورد بوسط صحراء أيامي الصعبة.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VduFvSgSPS2H4XpnhB/giphy.gif", bg: "#1e0031", br: "20px", icons: ['🌹','🌻'] },
+            { t: "أنتي استثنائية", p: "ما تشبهين أحد، أنتي النسخة الوحيدة اللي سكنت روحي.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v96vXfG1KzE3MvW5sE/giphy.gif", bg: "#2d1b33", br: "0", icons: ['💎','✨'] },
+            { t: "حلمي القادم", p: "تمنيت أكون يمج هسة، بس الوعد إن اللقاء صار قريب جداً.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "#0f0c29", br: "30px", icons: ['🌙','🌠'] },
+            { t: "بنت قلبي", p: "تبقين بعيني ذيج الطفلة اللي أخاف عليها من نسمة الهوا.", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v86vXfG1KzE3MvW5sE/giphy.gif", bg: "#4a1248", br: "100px", icons: ['🧸','💝'] },
+            { t: "تم الصلح يا روحي", p: "عيد ميلاد سعيد يا أغلى مارية بالعالم. أحبج حيدر ❤️", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueWZvbm41emx0bzR6cjI4dmx2Znd1Ym9icDhmN3ltemc2cW5iZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y866z3V6Yf6WqXU8zL/giphy.gif", bg: "#ffb3c1", br: "100px", icons: ['🎆','🎉'] }
         ];
 
         let cur = 0;
         const slider = document.getElementById('slider');
-        const body = document.getElementById('mainBody');
 
         function build() {
-            story.forEach((p, i) => {
+            script.forEach((p, i) => {
                 const div = document.createElement('div');
-                div.className = `page ${i === 0 ? 'active' : ''}`;
+                div.className = `scene ${i === 0 ? 'active' : ''}`;
                 div.innerHTML = `
-                    <img src="${p.img}" class="hero-img">
+                    <img src="${p.img}" class="main-sticker">
                     <h1>${p.t}</h1>
                     <p>${p.p}</p>
-                    <button class="royal-btn" style="border-radius:${p.br}; background:#ff4d6d; color:#fff;" onclick="next()">${p.btn}</button>
+                    <button class="royal-btn" style="border-radius:${p.br}" onclick="next()">${cur === script.length -1 ? 'أحبك حيدر' : 'تكملة القصة..'}</button>
                 `;
                 slider.appendChild(div);
             });
-            body.style.background = story[0].bg;
+            document.body.style.background = script[0].bg;
         }
 
         function next() {
-            const pages = document.querySelectorAll('.page');
-            if (cur < pages.length - 1) {
-                pages[cur].classList.remove('active');
+            const scenes = document.querySelectorAll('.scene');
+            if (cur < scenes.length - 1) {
+                scenes[cur].classList.remove('active');
                 cur++;
-                pages[cur].classList.add('active');
-                body.style.background = story[cur].bg;
-                if (cur >= 14) body.style.color = "#333";
+                scenes[cur].classList.add('active');
+                document.body.style.background = script[cur].bg;
+                if (cur >= 14) document.body.style.color = "#333";
             } else {
                 alert("تم إرسال كل الحب لقلب مارية! ❤️");
             }
         }
 
         setInterval(() => {
-            const s = document.createElement('div');
-            s.className = 'bg-element';
-            s.innerHTML = story[cur].icons[Math.floor(Math.random() * 2)];
-            s.style.left = Math.random() * 100 + 'vw';
-            s.style.fontSize = Math.random() * 20 + 20 + 'px';
-            s.style.animationDuration = Math.random() * 3 + 4 + 's';
-            document.body.appendChild(s);
-            setTimeout(() => s.remove(), 6000);
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.innerHTML = script[cur].icons[Math.floor(Math.random() * 2)];
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.fontSize = Math.random() * 20 + 20 + 'px';
+            p.style.animationDuration = Math.random() * 3 + 4 + 's';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 6000);
         }, 300);
 
         build();
