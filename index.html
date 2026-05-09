@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميلاد مارية 👑</title>
+    <title>نجمة ديجيتال | مفاجأة مارية ✨</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&family=Amiri:ital,wght@1,700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             height: 100vh; overflow: hidden; 
-            font-family: 'Cairo', sans-serif; transition: background 1s ease;
-            background-color: #fff;
+            font-family: 'Cairo', sans-serif; transition: background 1.5s ease;
+            background-color: #fdf2ff;
         }
 
         .container {
@@ -20,108 +20,140 @@
         }
 
         .page {
-            position: absolute; width: 90%; max-width: 500px;
+            position: absolute; width: 90%; max-width: 450px;
             text-align: center; opacity: 0; visibility: hidden;
-            transform: scale(0.8); transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.5); transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .page.active { opacity: 1; visibility: visible; transform: scale(1); }
 
-        /* الرسوم التوضيحية الملكية بدلاً من GIF */
-        .illustration-card {
-            width: 280px; height: 280px; margin: 0 auto 20px;
-            border-radius: 30px; 
-            display: flex; align-items: center; justify-content: center;
-            background: #fff; border: 4px solid #ffdeeb;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            font-size: 140px; color: #ff8fa3;
+        /* ستايل الهدية الكبيرة */
+        .gift-container {
+            width: 250px; height: 250px; margin: 0 auto 30px;
+            cursor: pointer; position: relative;
+            font-size: 150px; display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
         }
 
-        h1 { font-size: 38px; color: #d63384; margin-bottom: 8px; }
-        p { font-family: 'Amiri', serif; font-size: 24px; color: #555; line-height: 1.6; margin-bottom: 30px; font-weight: bold; }
+        /* حركات الاهتزاز عند الضغط */
+        .shake { animation: shake 0.3s ease-in-out; }
+        @keyframes shake {
+            0% { transform: rotate(0); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(-10deg); }
+            75% { transform: rotate(5deg); }
+            100% { transform: rotate(0); }
+        }
 
-        /* أزرار تفاعلية بأشكال شموع وكيك */
-        .special-btn {
-            font-size: 55px; cursor: pointer; transition: 0.3s;
-            background: none; border: none; outline: none;
-            display: inline-block; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
-        }
-        .special-btn:hover { transform: scale(1.2) rotate(-5deg); }
-        .label { display: block; font-size: 16px; color: #d63384; margin-top: 5px; font-weight: 900; }
+        .opened-gift { transform: scale(1.5); opacity: 0; transition: 0.5s; }
 
-        /* استيكرات الخلفية المتساقطة */
-        .falling-sticker {
-            position: absolute; top: -60px;
-            pointer-events: none; z-index: 1;
-            animation: fall linear forwards;
+        h1 { font-size: 28px; color: #b8860b; margin-bottom: 15px; }
+        p { font-family: 'Amiri', serif; font-size: 22px; color: #555; line-height: 1.5; margin-bottom: 30px; }
+
+        .btn-action {
+            background: #ff4d6d; color: white; border: none;
+            padding: 15px 40px; border-radius: 50px; font-size: 18px;
+            font-weight: 900; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
         }
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
+
+        /* تأثير الاحتفال */
+        .confetti {
+            position: absolute; top: -50px; pointer-events: none;
+            animation: fall linear forwards; z-index: 100;
         }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
-<body id="masterBody">
+<body>
+
+    <audio id="bdayMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
 
     <div class="container" id="slider"></div>
 
     <script>
         const story = [
-            { t: "ميلاد ملكتي مارية 👑", p: "اليوم نورت الدنيا بضحكتج الساحرة. كل عام وأنتي قطعة من روحي.", i: "👸", bg: "#fff0f3", btn: "🎂", lab: "افتحي الكيكة", rain: "🎈" },
-            { t: "أجمل من كبر سنة 😍", p: "صرتي أحلى بمليون مرة، وربي لا يحرمني منج ومن طيبتج.", i: "🎂", bg: "#f0f7ff", btn: "🕯️", lab: "ضوي الشمعة", rain: "🍰" },
-            { t: "اعتذار مرّ القسوة 😔", p: "مارية.. قلبي يوجعني لأن بعيد وما كدرت أجيب لج هدية تليق بيج.", i: "💔", bg: "#f8f9fa", btn: "🥺", lab: "سامحيني", rain: "🌧️" },
-            { t: "أنتي أغلى هدية 🎁", p: "لو بيدي أجيب لج نجوم السما وأخليها بين إيدج ما أقصر يا روحي.", i: "🎁", bg: "#fff9e6", btn: "🎁", lab: "افتحي الهدية", rain: "💎" },
-            { t: "وعد حيدر للأبد 💍", p: "أوعدج أول ما نلتقي أعوضج عن كل ثانية كنت بيها بعيد. أنتي ملكتي.", i: "💍", bg: "#f3e5f5", btn: "🔐", lab: "قفلت قلبي", rain: "💖" },
-            { t: "يا قطعة من الجنة 🌸", p: "ضحكتج هي اللي تصبرني على هالأيام الصعبة. لا تحرميني منها أبد.", i: "🌹", bg: "#e8f5e9", btn: "🌻", lab: "يا وردة", rain: "🌻" },
-            { t: "طفلتي المدللة 🧸", p: "تبقين بنظري ذيج الطفلة اللي أخاف عليها من الهوا. تدللي ماريتي.", i: "🧸", bg: "#fff3e0", btn: "🍭", lab: "تدللي ✅", rain: "🍬" },
-            { t: "المسافة مجرد أرقام 🌏", p: "قلوبنا متصلة بحبل ما ينقطع أبد. أنتي بكل دقة من قلبي.", i: "🌏", bg: "#e0f2f1", btn: "🗝️", lab: "المفتاح وياج", rain: "✨" },
-            { t: "عمر جديد وحب جديد ❤️", p: "يا رب تكون هالسنة بداية لكل خير تتمنيه. حيدر وياج لآخر نفس.", i: "💞", bg: "#fff0f6", btn: "🥰", lab: "أعشقج", rain: "💞" },
-            { t: "تم الصلح والاحتفال! ✅", p: "يلا هسة اضحكي ونوري دنيتي بضحكتج. ميلاد سعيد يا أحلى مارية بالعالم!", i: "🎇", bg: "#ffffff", btn: "🍾", lab: "احتفلي!", rain: "🎇" }
+            { t: "اليوم نورت الدنيا! ✨", p: "كل عام وأنتِ بألف خير يا أغلى إنسانة.. حضرنا الج مفاجأة!", emoji: "👸", btn: "شنو هي؟ 😍", type: "normal" },
+            { t: "هدية خاصة الج 🎁", p: "اضغطي على الهدية 3 مرات حتى تنفتح.. استعدي!", emoji: "🎁", btn: "اضغطي هنا 👇", type: "gift" },
+            { t: "ميلاد سعيد مارية! 🎉", p: "ان شاء الله كل أيامك فرح وسعادة ونجاح.. أحبج!", emoji: "🎂", btn: "ابدأ من جديد 🔄", type: "normal" }
         ];
 
         let cur = 0;
+        let clicks = 0;
         const slider = document.getElementById('slider');
-        const bgBody = document.getElementById('masterBody');
+        const audio = document.getElementById('bdayMusic');
 
         function build() {
+            slider.innerHTML = '';
             story.forEach((page, i) => {
                 const div = document.createElement('div');
-                div.className = `page ${i === 0 ? 'active' : ''}`;
-                div.innerHTML = `
-                    <div class="illustration-card">${page.i}</div>
-                    <h1>${page.t}</h1>
-                    <p>${page.p}</p>
-                    <button class="special-btn" onclick="nextPage()">
-                        ${page.btn}
-                        <span class="label">${page.lab}</span>
-                    </button>
-                `;
+                div.className = `page ${i === cur ? 'active' : ''}`;
+                
+                if(page.type === "gift") {
+                    div.innerHTML = `
+                        <h1>${page.t}</h1>
+                        <div class="gift-container" id="bigGift" onclick="handleGiftClick()">🎁</div>
+                        <p id="giftHint">اضغطي 3 مرات لتفتحي الهدية!</p>
+                    `;
+                } else {
+                    div.innerHTML = `
+                        <div style="font-size:100px; margin-bottom:20px;">${page.emoji}</div>
+                        <h1>${page.t}</h1>
+                        <p>${page.p}</p>
+                        <button class="btn-action" onclick="nextPage()">${page.btn}</button>
+                    `;
+                }
                 slider.appendChild(div);
             });
-            bgBody.style.backgroundColor = story[0].bg;
         }
 
-        function nextPage() {
-            const pages = document.querySelectorAll('.page');
-            if (cur < pages.length - 1) {
-                pages[cur].classList.remove('active');
-                cur++;
-                pages[cur].classList.add('active');
-                bgBody.style.backgroundColor = story[cur].bg;
-            } else {
-                alert("أحبج مارية.. ميلاد سعيد ❤️");
+        function handleGiftClick() {
+            const gift = document.getElementById('bigGift');
+            const hint = document.getElementById('giftHint');
+            clicks++;
+
+            // إضافة حركة اهتزاز
+            gift.classList.add('shake');
+            setTimeout(() => gift.classList.remove('shake'), 300);
+
+            if(clicks === 1) hint.innerText = "باقي مرتين! 😍";
+            if(clicks === 2) hint.innerText = "آخر مرة! استعدي... 🔥";
+            
+            if(clicks >= 3) {
+                gift.innerHTML = "🎉"; // تتحول الهدية لانفجار
+                gift.style.transform = "scale(2)";
+                hint.innerText = "تفتحت المفاجأة! ✨";
+                
+                // تشغيل الموسيقى
+                audio.play().catch(e => console.log("المتصفح منع التشغيل التلقائي"));
+                
+                // تأثير الاحتفال
+                for(let i=0; i<50; i++) createConfetti();
+                
+                // الانتقال للصفحة الأخيرة بعد ثانيتين
+                setTimeout(nextPage, 3000);
             }
         }
 
-        setInterval(() => {
-            const r = document.createElement('div');
-            r.className = 'falling-sticker';
-            r.innerHTML = story[cur].rain;
-            r.style.left = Math.random() * 100 + 'vw';
-            r.style.fontSize = Math.random() * 20 + 30 + 'px';
-            r.style.animationDuration = Math.random() * 2 + 3 + 's';
-            document.body.appendChild(r);
-            setTimeout(() => r.remove(), 5000);
-        }, 400);
+        function nextPage() {
+            if(cur === story.length - 1) {
+                location.reload();
+                return;
+            }
+            cur++;
+            build();
+        }
+
+        function createConfetti() {
+            const c = document.createElement('div');
+            c.className = 'confetti';
+            c.innerHTML = ['✨', '🎈', '🎉', '🎊', '🌸'][Math.floor(Math.random() * 5)];
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.fontSize = Math.random() * 20 + 20 + 'px';
+            c.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 5000);
+        }
 
         build();
     </script>
