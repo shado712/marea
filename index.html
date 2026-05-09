@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميلاد مارية 👑</title>
+    <title>قصة ميلاد مارية 👑</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&family=Amiri:ital,wght@1,700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             height: 100vh; overflow: hidden; 
-            font-family: 'Cairo', sans-serif; transition: background 1s ease;
-            background-color: #fff;
+            font-family: 'Cairo', sans-serif; transition: background 1.2s ease;
+            background-color: #fff5f7;
         }
 
         .container {
@@ -20,84 +20,89 @@
         }
 
         .page {
-            position: absolute; width: 90%; max-width: 500px;
+            position: absolute; width: 90%; max-width: 450px;
             text-align: center; opacity: 0; visibility: hidden;
-            transform: scale(0.8); transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(40px); transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2);
         }
 
-        .page.active { opacity: 1; visibility: visible; transform: scale(1); }
+        .page.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* الرسوم التوضيحية الملكية بدلاً من GIF */
+        /* الكارت التوضيحي - مطابق تماماً للنمط المطلوب */
         .illustration-card {
-            width: 280px; height: 280px; margin: 0 auto 20px;
-            border-radius: 30px; 
+            width: 260px; height: 260px; margin: 0 auto 30px;
+            background: #ffffff; border-radius: 40px;
             display: flex; align-items: center; justify-content: center;
-            background: #fff; border: 4px solid #ffdeeb;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            font-size: 140px; color: #ff8fa3;
+            box-shadow: 0 20px 40px rgba(214, 51, 132, 0.1);
+            border: 5px solid #fff;
+            position: relative; overflow: hidden;
+        }
+        /* الصور التوضيحية المرسومة */
+        .illustration-card img {
+            width: 85%; height: 85%; object-fit: contain;
+            filter: drop-shadow(0 5px 10px rgba(214, 51, 132, 0.2));
+        }
+        /* توهج خلف الكارت */
+        .illustration-card::after {
+            content: ''; position: absolute; width: 110%; height: 110%;
+            background: radial-gradient(circle, rgba(255,143,163,0.3) 0%, transparent 70%);
+            z-index: -1;
         }
 
-        h1 { font-size: 38px; color: #d63384; margin-bottom: 8px; }
-        p { font-family: 'Amiri', serif; font-size: 24px; color: #555; line-height: 1.6; margin-bottom: 30px; font-weight: bold; }
+        h1 { font-size: 32px; color: #d63384; margin-bottom: 10px; }
+        p { font-family: 'Amiri', serif; font-size: 24px; color: #444; line-height: 1.6; margin-bottom: 35px; font-weight: bold; }
 
-        /* أزرار تفاعلية بأشكال شموع وكيك */
-        .special-btn {
-            font-size: 55px; cursor: pointer; transition: 0.3s;
-            background: none; border: none; outline: none;
-            display: inline-block; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        /* الأزرار الاحتفالية */
+        .event-btn {
+            background: #ff4d6d; color: white; border: none;
+            padding: 15px 50px; border-radius: 50px; font-size: 20px;
+            font-weight: 900; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
         }
-        .special-btn:hover { transform: scale(1.2) rotate(-5deg); }
-        .label { display: block; font-size: 16px; color: #d63384; margin-top: 5px; font-weight: 900; }
+        .event-btn:hover { transform: scale(1.1); background: #d63384; }
 
-        /* استيكرات الخلفية المتساقطة */
-        .falling-sticker {
+        /* مطر الاستيكرات */
+        .sticker-rain {
             position: absolute; top: -60px;
             pointer-events: none; z-index: 1;
-            animation: fall linear forwards;
+            animation: rainEffect linear forwards;
         }
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
+        @keyframes rainEffect { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
-<body id="masterBody">
+<body id="bgLayer">
 
-    <div class="container" id="slider"></div>
+    <div class="container" id="mainSlider"></div>
 
     <script>
         const story = [
-            { t: "ميلاد ملكتي مارية 👑", p: "اليوم نورت الدنيا بضحكتج الساحرة. كل عام وأنتي قطعة من روحي.", i: "👸", bg: "#fff0f3", btn: "🎂", lab: "افتحي الكيكة", rain: "🎈" },
-            { t: "أجمل من كبر سنة 😍", p: "صرتي أحلى بمليون مرة، وربي لا يحرمني منج ومن طيبتج.", i: "🎂", bg: "#f0f7ff", btn: "🕯️", lab: "ضوي الشمعة", rain: "🍰" },
-            { t: "اعتذار مرّ القسوة 😔", p: "مارية.. قلبي يوجعني لأن بعيد وما كدرت أجيب لج هدية تليق بيج.", i: "💔", bg: "#f8f9fa", btn: "🥺", lab: "سامحيني", rain: "🌧️" },
-            { t: "أنتي أغلى هدية 🎁", p: "لو بيدي أجيب لج نجوم السما وأخليها بين إيدج ما أقصر يا روحي.", i: "🎁", bg: "#fff9e6", btn: "🎁", lab: "افتحي الهدية", rain: "💎" },
-            { t: "وعد حيدر للأبد 💍", p: "أوعدج أول ما نلتقي أعوضج عن كل ثانية كنت بيها بعيد. أنتي ملكتي.", i: "💍", bg: "#f3e5f5", btn: "🔐", lab: "قفلت قلبي", rain: "💖" },
-            { t: "يا قطعة من الجنة 🌸", p: "ضحكتج هي اللي تصبرني على هالأيام الصعبة. لا تحرميني منها أبد.", i: "🌹", bg: "#e8f5e9", btn: "🌻", lab: "يا وردة", rain: "🌻" },
-            { t: "طفلتي المدللة 🧸", p: "تبقين بنظري ذيج الطفلة اللي أخاف عليها من الهوا. تدللي ماريتي.", i: "🧸", bg: "#fff3e0", btn: "🍭", lab: "تدللي ✅", rain: "🍬" },
-            { t: "المسافة مجرد أرقام 🌏", p: "قلوبنا متصلة بحبل ما ينقطع أبد. أنتي بكل دقة من قلبي.", i: "🌏", bg: "#e0f2f1", btn: "🗝️", lab: "المفتاح وياج", rain: "✨" },
-            { t: "عمر جديد وحب جديد ❤️", p: "يا رب تكون هالسنة بداية لكل خير تتمنيه. حيدر وياج لآخر نفس.", i: "💞", bg: "#fff0f6", btn: "🥰", lab: "أعشقج", rain: "💞" },
-            { t: "تم الصلح والاحتفال! ✅", p: "يلا هسة اضحكي ونوري دنيتي بضحكتج. ميلاد سعيد يا أحلى مارية بالعالم!", i: "🎇", bg: "#ffffff", btn: "🍾", lab: "احتفلي!", rain: "🎇" }
+            { t: "ميلاد الملكة مارية 👑", p: "اليوم مو بس يوم ميلادج، اليوم نورت الدنيا كلها بوجودج.", img: "https://i.ibb.co/L8G3w5g/cake-crown.png", bg: "#fff0f3", btn: "مستعدة للرحلة؟ ✨", rain: "🎈" },
+            { t: "أجمل الذكريات 📸", p: "كل سنة وأنتي بقلبي تكبرين، يا أحلى ذكرى بحياتي.", img: "https://i.ibb.co/mDk3hCg/camera-heart.png", bg: "#f0f7ff", btn: "تكملة القصة..", rain: "💖" },
+            { t: "اعتذار من القلب 😔", p: "مارية.. اعتذر لأن البعد منعني أكون يمج بهاللحظة.", img: "https://i.ibb.co/f4bN7QY/broken-heart.png", bg: "#f8f9fa", btn: "سامحيني 🥺", rain: "🌧️" },
+            { t: "وعد باللقاء القريب ✈️", p: "أوعدج أول ما نلتقي، أعوضج عن كل لحظة غياب.", img: "https://i.ibb.co/3W4T5gW/map-heart.png", bg: "#fff9e6", btn: "وعد رجال 💍", rain: "✈️" },
+            { t: "أنتي هدية حياتي 🎁", p: "لو بيدي أهديج عمري، والله ما يغلى عليج.", img: "https://i.ibb.co/jH6b0bQ/gift-crown.png", bg: "#f3e5f5", btn: "يا روحي ❤️", rain: "💎" },
+            { t: "يا عطر الورد 🌹", p: "أنتي الوردة اللي تزيّن عالمي وتنوره بكل لحظة.", img: "https://i.ibb.co/mR3P88Y/rose-bouquet.png", bg: "#e8f5e9", btn: "يا أميرة ✨", rain: "🌻" },
+            { t: "طفلتي المدللة 🧸", p: "تبقين بعيني ذيج الطفلة اللي أخاف عليها من نسمة الهواء.", img: "https://i.ibb.co/X8Y5G2q/teddy-bear.png", bg: "#fff3e0", btn: "أعشقج 😍", rain: "🍭" },
+            { t: "أنتي سندي وقوتي 💪", p: "راح أبقى وياج ولأجليج، جبلاً ما يميل، لحد آخر نفس.", img: "https://i.ibb.co/yS5k1B9/shield-heart.png", bg: "#f1f8e9", btn: "أنتي قوتي", rain: "💞" },
+            { t: "ضحكتج هي العيد 🎉", p: "لا تحرميني من هالضحكة، هي اللي تخليني عايش.", img: "https://i.giphy.com/media/VduFvSgSPS2H4XpnhB/giphy.gif", bg: "#fffde7", btn: "اضحكيلي 😍", rain: "🌸" },
+            { t: "تم الصلح يا ملكة ✅", p: "كل عام وأنتي بألف خير. حيدر يحبج ويموت عليج!", img: "https://i.ibb.co/L8G3w5g/cake-crown.png", bg: "#ffffff", btn: "أحبك حيدر ❤️", rain: "🎇" }
         ];
 
         let cur = 0;
-        const slider = document.getElementById('slider');
-        const bgBody = document.getElementById('masterBody');
+        const mainSlider = document.getElementById('mainSlider');
 
         function build() {
-            story.forEach((page, i) => {
+            story.forEach((p, i) => {
                 const div = document.createElement('div');
                 div.className = `page ${i === 0 ? 'active' : ''}`;
                 div.innerHTML = `
-                    <div class="illustration-card">${page.i}</div>
-                    <h1>${page.t}</h1>
-                    <p>${page.p}</p>
-                    <button class="special-btn" onclick="nextPage()">
-                        ${page.btn}
-                        <span class="label">${page.lab}</span>
-                    </button>
+                    <div class="illustration-card"><img src="${p.img}" alt="Illustration"></div>
+                    <h1>${p.t}</h1>
+                    <p>${p.p}</p>
+                    <button class="event-btn" onclick="nextPage()">${p.btn}</button>
                 `;
-                slider.appendChild(div);
+                mainSlider.appendChild(div);
             });
-            bgBody.style.backgroundColor = story[0].bg;
+            document.body.style.backgroundColor = story[0].bg;
         }
 
         function nextPage() {
@@ -106,7 +111,7 @@
                 pages[cur].classList.remove('active');
                 cur++;
                 pages[cur].classList.add('active');
-                bgBody.style.backgroundColor = story[cur].bg;
+                document.body.style.backgroundColor = story[cur].bg;
             } else {
                 alert("أحبج مارية.. ميلاد سعيد ❤️");
             }
@@ -114,7 +119,7 @@
 
         setInterval(() => {
             const r = document.createElement('div');
-            r.className = 'falling-sticker';
+            r.className = 'sticker-rain';
             r.innerHTML = story[cur].rain;
             r.style.left = Math.random() * 100 + 'vw';
             r.style.fontSize = Math.random() * 20 + 30 + 'px';
