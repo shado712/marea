@@ -37,7 +37,6 @@
             cursor: pointer; transition: transform 0.2s;
         }
 
-        /* حركات الاهتزاز للهدية */
         .shake { animation: shakeBtn 0.3s ease-in-out; }
         @keyframes shakeBtn {
             0%, 100% { transform: rotate(0); }
@@ -68,7 +67,7 @@
 </head>
 <body id="masterBody">
 
-    <audio id="bdayMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
+    <audio id="bdayMusic" src="https://pro-admin.zajelauto.com/uploads/1715344444_bday_song.mp3" preload="auto"></audio>
 
     <div class="container" id="slider"></div>
 
@@ -85,7 +84,6 @@
             { t: "عمر جديد وحب جديد ❤️", p: "يا رب تكون هالسنة بداية لكل خير تتمنيه. حيدر وياج لآخر نفس.", i: "💞", bg: "#fff0f6", btn: "🥰", lab: "أعشقج", rain: "💞", type: "normal" },
             { t: "تم الصلح والاحتفال! ✅", p: "يلا هسة اضحكي ونوري دنيتي بضحكتج. ميلاد سعيد يا أحلى مارية بالعالم!", i: "🎇", bg: "#ffffff", btn: "🍾", lab: "احتفلي!", rain: "🎇", type: "normal" },
             
-            // صفحة الهدية النهائية
             { t: "مفاجأة أخيرة 🎁", p: "اضغطي على الهدية 3 مرات حتى تفتحين المفاجأة مالتج!", i: "🎁", bg: "#fff9e6", btn: "none", lab: "باقي 3 ضغطات", rain: "✨", type: "gift" }
         ];
 
@@ -142,10 +140,8 @@
                 counter.innerText = "ميلاد سعيد يا روحي! ✨";
                 hint.innerText = "أحبج للأبد ❤️";
                 
-                // تشغيل الموسيقى
-                audio.play().catch(e => console.log("Audio play prevented"));
+                audio.play().catch(e => console.log("Audio play blocked"));
                 
-                // تأثير مطر كثيف
                 for(let i=0; i<30; i++) spawnRain();
             }
         }
