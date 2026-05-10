@@ -67,7 +67,9 @@
 </head>
 <body id="masterBody">
 
-    <audio id="bdayMusic" src="https://pro-admin.zajelauto.com/uploads/1715344444_bday_song.mp3" preload="auto"></audio>
+    <audio id="bdayMusic" preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="container" id="slider"></div>
 
@@ -84,7 +86,8 @@
             { t: "عمر جديد وحب جديد ❤️", p: "يا رب تكون هالسنة بداية لكل خير تتمنيه. حيدر وياج لآخر نفس.", i: "💞", bg: "#fff0f6", btn: "🥰", lab: "أعشقج", rain: "💞", type: "normal" },
             { t: "تم الصلح والاحتفال! ✅", p: "يلا هسة اضحكي ونوري دنيتي بضحكتج. ميلاد سعيد يا أحلى مارية بالعالم!", i: "🎇", bg: "#ffffff", btn: "🍾", lab: "احتفلي!", rain: "🎇", type: "normal" },
             
-            { t: "مفاجأة أخيرة 🎁", p: "اضغطي على الهدية 3 مرات حتى تفتحين المفاجأة مالتج!", i: "🎁", bg: "#fff9e6", btn: "none", lab: "باقي 3 ضغطات", rain: "✨", type: "gift" }
+            // صفحة الهدية النهائية
+            { t: "مفاجأة أخيرة 🎁", p: "اضغطي على الهدية 3 مرات حتى تفتحين مفاجأتج وتسمعين الأغنية!", i: "🎁", bg: "#fff9e6", btn: "none", lab: "باقي 3 ضغطات", rain: "✨", type: "gift" }
         ];
 
         let cur = 0;
@@ -128,20 +131,27 @@
             const hint = document.getElementById('giftHint');
             giftClicks++;
 
+            // اهتزاز الهدية عند كل ضغطة
             giftBox.classList.add('shake');
             setTimeout(() => giftBox.classList.remove('shake'), 300);
 
-            if(giftClicks === 1) counter.innerText = "باقي ضغطتين! 😍";
+            // تفعيل الصوت مع أول ضغطة (صامت) لفك حظر المتصفح
+            if(giftClicks === 1) {
+                audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
+                counter.innerText = "باقي ضغطتين! 😍";
+            }
             if(giftClicks === 2) counter.innerText = "آخر ضغطة! استعدي.. 🔥";
 
             if(giftClicks >= 3) {
-                giftBox.innerHTML = "🎉";
+                giftBox.innerHTML = "🎂";
                 giftBox.style.transform = "scale(1.3)";
-                counter.innerText = "ميلاد سعيد يا روحي! ✨";
+                counter.innerText = "كل عام وأنتِ الحب! ✨";
                 hint.innerText = "أحبج للأبد ❤️";
                 
-                audio.play().catch(e => console.log("Audio play blocked"));
+                // تشغيل الأغنية فعلياً
+                audio.play();
                 
+                // مطر احتفالي كثيف
                 for(let i=0; i<30; i++) spawnRain();
             }
         }
